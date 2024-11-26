@@ -1,14 +1,14 @@
-import java.text.SimpleDateFormat
-import java.util.Date
+import java.time.LocalDate
 import scala.io.Source
 import scala.collection.mutable.ListBuffer
 //Created by:
 //  DANIELFARID FEARN HOLDEN 22047880
-//  Current commit: 3
+//  Current commit: 5
 //
 //Project Comments:
-//  GitHub commits now working (tested in previous commit)
-//  Found a way to store all data except the Date into their own Record class instances.
+//  Forgot to update comments for previous commit (4)
+//  Still facing issues with Date format, however, new Date type can be tested from java.time.LocalDate API
+//  Found using https://louiseforbes101.medium.com/dates-and-time-in-scala-bb7590276dfe
 //
 //  Updated To-Do:
 //    --Create outline for how to solve the 3 problems--
@@ -17,17 +17,17 @@ import scala.collection.mutable.ListBuffer
 //        https://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples/
 //      which describes how to read data from a text/data file.
 //
-//     1st step almost done, need to store Date.
+//     1st step almost done, need to store Date. Time to test LocalDate API.
 //
 //Task: Test how to read data from hospital.csv
 //  Since we are just testing to see how the data can be parsed, no emphasis will be placed on efficiency.
 //  As described from assignment paper and in the .csv file, the data is in following format, so create a class with related properties.
-//    1. Date - Date
+//    1. Date - Date <-- Figure out how to store this one.
 //    2. State - String
 //    3. Beds - Int
 //    ... the rest of which are Int
 
-class Record(val date: Date,
+class Record(val date: LocalDate,
              val state: String,
              val Beds: Int,
              val beds_covid: Int,
@@ -45,17 +45,16 @@ class Record(val date: Date,
 end Record
 
 @main def myfirstscala(): Unit =
-  //Test how to parse Date format using SimpleDateFormat according to https://www.geeksforgeeks.org/how-to-convert-string-to-date-time-in-scala/
+  val dateString = "2020-04-24"
+  println(LocalDate.parse(dateString))
 
-  val dFormat = new SimpleDateFormat("yyyy-MM-dd")
-  val testDate = "2020-03-24"
-  println(dFormat.parse(testDate))
-  // returns Tue Mar 24 00:00:00 MYT 2020 which is not the format which we want.
-  // overall still facing issues with date format so need to find different API
-
+  val datesArr : Array[LocalDate] = Array(LocalDate.parse("2020-06-24"), LocalDate.parse("2020-04-25"), LocalDate.parse("2020-05-24"))
+  println(datesArr.mkString)
+  println(datesArr.sorted.mkString) //not only is data in correct format, but we can sort chronogically should we want to, thus, java.time.LocalDate shall be API used.
 
 //  val hospitalData = "./data/hospital.csv"
 //  val records_listBuffer = ListBuffer.empty[Record] // listBuffer used to store all Record instances efficiently.
+//
 //  for (line <- Source.fromFile(hospitalData).getLines.drop(1)) { //read each line from hospital.csv file
 //    val line_data = line.split(",")
 //    val date_format = "yyyy-MM-dd"
