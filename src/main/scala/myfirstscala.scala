@@ -3,7 +3,7 @@ import scala.io.Source
 import scala.collection.mutable.ListBuffer
 //Created by:
 //  DANIELFARID FEARN HOLDEN 22047880
-//  Current commit: 6
+//  Current commit: 7
 //
 //Project Comments:
 //  Finally figured out correct Date data type to use, and so we can test to see whether the data is being stored correctly into records_listBuffer
@@ -15,10 +15,10 @@ import scala.collection.mutable.ListBuffer
 //        https://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples/
 //      which describes how to read data from a text/data file.
 //
-//    As described above, Date can now be stored so let's run tests to see whether .csv is being parsed into records_listBuffer correctly
+//    2nd Step: Access data to solve the 3 questions.
 //
-//Task: Store .csv data into records_listBuffer. Check that it is done properly with a simple test of a counter and property assessor.
-//Also, update Record to become case class as all properties are values and thus Records will be stored as distinct values.
+//Tasks: Use records_listBuffer collection to do calculations for the answer to 3 questions.
+//       Organise code a bit more to make more readable.
 
 
 case class Record(
@@ -38,14 +38,13 @@ case class Record(
              hosp_nonCovid: Int
             )
 
-@main def myfirstscala(): Unit =
+def initData(): ListBuffer[Record] = //function called in Main to parse and return the data.
   val dataFilePath = "./data/hospital.csv"
   val data = Source.fromFile(dataFilePath)
-  val records_listBuffer = ListBuffer.empty[Record] // listBuffer used to store all Record instances efficiently.
+  val records_listBuffer = ListBuffer.empty[Record] // ListBuffer used to store all Record instances efficiently.
   var counter = 0
-  for (line <- data.drop(1)) { //read each line from hospital.csv file
+  for (line <- data.getLines().drop(1)) { //read each line from hospital.csv file excluding header
     val line_data = line.split(",")
-    val date_format = "yyyy-MM-dd"
     records_listBuffer.append(Record(
       LocalDate.parse(line_data(0)),
       line_data(1),
@@ -62,15 +61,15 @@ case class Record(
       line_data(12).toInt,
       line_data(13).toInt)
     )
-    counter += 1
   }
   data.close()
+  records_listBuffer
+end initData
 
+def question1(): Unit =
+  val something = "Something"
 
-//by manually opening and scrolling to the bottom of the hospital.csv file, we can see that there are 26031 rows of record data.
-//so that means if we print the counter, we should see 26031
-  println(counter) //output is 26031
-
-//let us also check that the data is in the correct format by checking the first few data of the first record in records_listBuffer
-  println(s"${records_listBuffer.head.date}\n${records_listBuffer.head.state}\n${records_listBuffer.head.Beds}\n${records_listBuffer.head.beds_covid}\n${records_listBuffer.head.beds_nonCrit}")
-  // output is correct with what is expected, thus we can begin accessing these data to manipulate them to get the answers.
+@main def myfirstscala(): Unit =
+  val records: ListBuffer[Record] = initData() //initialize data.
+  //run a quick check to make sure that previous typos, errors and adjustments were successful
+  println(s"${records.head.state}") //outputs expected result, adjustments were successful.
