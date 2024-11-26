@@ -1,3 +1,4 @@
+import java.text.SimpleDateFormat
 import java.util.Date
 import scala.io.Source
 import scala.collection.mutable.ListBuffer
@@ -44,24 +45,34 @@ class Record(val date: Date,
 end Record
 
 @main def myfirstscala(): Unit =
-  val hospitalData = "./data/hospital.csv"
-  val records_listBuffer = ListBuffer.empty[Record] // listBuffer used to store all Record instances efficiently.
-  for (line <- Source.fromFile(hospitalData).getLines.drop(1)) { //read each line from hospital.csv file
-    val line_data = line.split(",")
-    records_listBuffer.append(Record(
-      Date(), // too much code to simply parse the string into a Date format with the same information. Must find a different Date type/API to use.
-      line_data(1),
-      line_data(2).toInt,
-      line_data(3).toInt,
-      line_data(4).toInt,
-      line_data(5).toInt,
-      line_data(6).toInt,
-      line_data(7).toInt,
-      line_data(8).toInt,
-      line_data(9).toInt,
-      line_data(10).toInt,
-      line_data(11).toInt,
-      line_data(12).toInt,
-      line_data(13).toInt)
-    )
-  }
+  //Test how to parse Date format using SimpleDateFormat according to https://www.geeksforgeeks.org/how-to-convert-string-to-date-time-in-scala/
+
+  val dFormat = new SimpleDateFormat("yyyy-MM-dd")
+  val testDate = "2020-03-24"
+  println(dFormat.parse(testDate))
+  // returns Tue Mar 24 00:00:00 MYT 2020 which is not the format which we want.
+  // overall still facing issues with date format so need to find different API
+
+
+//  val hospitalData = "./data/hospital.csv"
+//  val records_listBuffer = ListBuffer.empty[Record] // listBuffer used to store all Record instances efficiently.
+//  for (line <- Source.fromFile(hospitalData).getLines.drop(1)) { //read each line from hospital.csv file
+//    val line_data = line.split(",")
+//    val date_format = "yyyy-MM-dd"
+//    records_listBuffer.append(Record(
+//      Date(), // too much code to simply parse the string into a Date format with the same information. Must find a different Date type/API to use.
+//      line_data(1),
+//      line_data(2).toInt,
+//      line_data(3).toInt,
+//      line_data(4).toInt,
+//      line_data(5).toInt,
+//      line_data(6).toInt,
+//      line_data(7).toInt,
+//      line_data(8).toInt,
+//      line_data(9).toInt,
+//      line_data(10).toInt,
+//      line_data(11).toInt,
+//      line_data(12).toInt,
+//      line_data(13).toInt)
+//    )
+//  }
