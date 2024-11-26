@@ -3,22 +3,21 @@ import scala.io.Source
 import scala.collection.mutable.ListBuffer
 //Created by:
 //  DANIELFARID FEARN HOLDEN 22047880
-//  Current commit: 8
+//  Current commit: 9
 //
 //Project Comments:
-//  Organised code in previous commit, now time to solve questions
+//  Question 1 finished. Now time for question 2.
 //
 //  Updated To-Do:
 //    --Create outline for how to solve the 3 problems--
-//    1st step: Figure out how to read data from hospital.csv file
+//    1st step: Figure out how to read data from hospital.csv file --DONE
 //      let us test using the resource provided in the assignment document:
 //        https://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples/
 //      which describes how to read data from a text/data file.
 //
 //    2nd Step: Access data to solve the 3 questions.
 //
-//Tasks: Use records_listBuffer collection to do calculations for the answer to 3 questions.
-//       Organise code a bit more to make more readable.
+//Tasks: Complete question 2
 
 
 case class Record(
@@ -37,6 +36,7 @@ case class Record(
                    hosp_pui: Int,
                    hosp_nonCovid: Int
             )
+end Record
 
 def initData(): ListBuffer[Record] = //function called in Main to parse and return the data.
   val dataFilePath = "./data/hospital.csv"
@@ -78,6 +78,23 @@ def question1(data: ListBuffer[Record]): Unit = //task: Find the hospital with h
   println(s"Question 1: ${latestMax_Record.state} had highest no. of beds (${latestMax_Record.beds}) on ${latestMax_Record.date}. ${allTimeMax_Record.state} had highest (${allTimeMax_Record.beds}) bed no. of all time")
 end question1
 
+def question2(data: ListBuffer[Record]): Unit = //task: Find ratio between total number of covid beds to total number of beds for entire dataset
+  //calculate ratio
+  var totalCovidBeds = 0 //init a totalVar for beds_covid
+  var totalBeds = 0 //init a totalVar for beds
+  for (record <- data) { //for loop iterates over each record in dataset to allow for totalVars to update.
+    totalCovidBeds += record.beds_covid
+    totalBeds += record.beds
+  }
+  val ratio: Double = totalCovidBeds.toDouble / totalBeds //final ratio value calculated as double
+  println(f"Question 2: Ratio of covid beds to total beds for dataset is $totalCovidBeds to $totalBeds or ~ $ratio%.2f") // final print. Formatting of ratio value to be rounded to 2dp is from chatGPT.
+end question2
+
+def question3(data:ListBuffer[Record]): Unit =
+  println("Question 3: ")
+end question3
+
 @main def myfirstscala(): Unit =
   val records: ListBuffer[Record] = initData() //initialize data.
   question1(records) // question 1 working.
+  question2(records) // question 2 working.
