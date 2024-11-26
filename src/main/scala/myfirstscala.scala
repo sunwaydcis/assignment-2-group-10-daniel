@@ -1,11 +1,13 @@
 import java.util.Date
 import scala.io.Source
+import scala.collection.mutable.ListBuffer
 //Created by:
 //  DANIELFARID FEARN HOLDEN 22047880
-//  Current commit: 2
+//  Current commit: 3
 //
 //Project Comments:
 //  GitHub commits now working (tested in previous commit)
+//  Found a way to store all data except the Date into their own Record class instances.
 //
 //  Updated To-Do:
 //    --Create outline for how to solve the 3 problems--
@@ -13,6 +15,8 @@ import scala.io.Source
 //      let us test using the resource provided in the assignment document:
 //        https://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples/
 //      which describes how to read data from a text/data file.
+//
+//     1st step almost done, need to store Date.
 //
 //Task: Test how to read data from hospital.csv
 //  Since we are just testing to see how the data can be parsed, no emphasis will be placed on efficiency.
@@ -41,6 +45,23 @@ end Record
 
 @main def myfirstscala(): Unit =
   val hospitalData = "./data/hospital.csv"
+  val records_listBuffer = ListBuffer.empty[Record] // listBuffer used to store all Record instances efficiently.
   for (line <- Source.fromFile(hospitalData).getLines.drop(1)) { //read each line from hospital.csv file
-    //figure out what to do here to be able to store data appropriately in Record object instances.
-}
+    val line_data = line.split(",")
+    records_listBuffer.append(Record(
+      Date(), // too much code to simply parse the string into a Date format with the same information. Must find a different Date type/API to use.
+      line_data(1),
+      line_data(2).toInt,
+      line_data(3).toInt,
+      line_data(4).toInt,
+      line_data(5).toInt,
+      line_data(6).toInt,
+      line_data(7).toInt,
+      line_data(8).toInt,
+      line_data(9).toInt,
+      line_data(10).toInt,
+      line_data(11).toInt,
+      line_data(12).toInt,
+      line_data(13).toInt)
+    )
+  }
