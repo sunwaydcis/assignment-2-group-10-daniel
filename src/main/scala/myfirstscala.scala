@@ -3,10 +3,10 @@ import scala.io.Source
 import scala.collection.mutable.ListBuffer
 //Created by:
 //  DANIELFARID FEARN HOLDEN 22047880
-//  Current commit: 7
+//  Current commit: 8
 //
 //Project Comments:
-//  Finally figured out correct Date data type to use, and so we can test to see whether the data is being stored correctly into records_listBuffer
+//  Organised code in previous commit, now time to solve questions
 //
 //  Updated To-Do:
 //    --Create outline for how to solve the 3 problems--
@@ -22,20 +22,20 @@ import scala.collection.mutable.ListBuffer
 
 
 case class Record(
-             date: LocalDate,
-             state: String,
-             Beds: Int,
-             beds_covid: Int,
-             beds_nonCrit: Int,
-             admitted_pui: Int,
-             admitted_covid: Int,
-             admitted_total: Int,
-             discharged_pui: Int,
-             discharged_covid: Int,
-             discharged_total: Int,
-             hosp_covid: Int,
-             hosp_pui: Int,
-             hosp_nonCovid: Int
+                   date: LocalDate,
+                   state: String,
+                   beds: Int,
+                   beds_covid: Int,
+                   beds_nonCrit: Int,
+                   admitted_pui: Int,
+                   admitted_covid: Int,
+                   admitted_total: Int,
+                   discharged_pui: Int,
+                   discharged_covid: Int,
+                   discharged_total: Int,
+                   hosp_covid: Int,
+                   hosp_pui: Int,
+                   hosp_nonCovid: Int
             )
 
 def initData(): ListBuffer[Record] = //function called in Main to parse and return the data.
@@ -66,10 +66,18 @@ def initData(): ListBuffer[Record] = //function called in Main to parse and retu
   records_listBuffer
 end initData
 
-def question1(): Unit =
-  val something = "Something"
+def question1(data: ListBuffer[Record]): Unit = //task: Find the hospital with highest all-time bed count and the highest count for most recent date.
+  //first need to find max bed value for all records and the state and date, thus use maxBy method on collection.
+  //  reference: https://www.scala-lang.org/api/3.5.2/scala/collection/IterableOnceOps.html
+  val allTimeMax_Record = data.maxBy(_.beds) //find the max beds value for ALL records
+
+  //now need to find max bed value for latest record only.
+  val latestMax_Record = data.maxBy(record => (record.date, record.beds)) //find record first with max date, and then with max beds
+
+  //final print
+  println(s"Question 1: ${latestMax_Record.state} had highest no. of beds (${latestMax_Record.beds}) on ${latestMax_Record.date}. ${allTimeMax_Record.state} had highest (${allTimeMax_Record.beds}) bed no. of all time")
+end question1
 
 @main def myfirstscala(): Unit =
   val records: ListBuffer[Record] = initData() //initialize data.
-  //run a quick check to make sure that previous typos, errors and adjustments were successful
-  println(s"${records.head.state}") //outputs expected result, adjustments were successful.
+  question1(records) // question 1 working.
