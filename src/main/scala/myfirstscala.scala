@@ -1,12 +1,15 @@
 import java.time.LocalDate
 import scala.io.Source
 import scala.collection.mutable.ListBuffer
+import scala.collection.mutable
+
+
 //Created by:
 //  DANIELFARID FEARN HOLDEN 22047880
-//  Current commit: 9
+//  Current commit: 10
 //
 //Project Comments:
-//  Question 1 finished. Now time for question 2.
+//  Question 2 finished. Now time for question 3.
 //
 //  Updated To-Do:
 //    --Create outline for how to solve the 3 problems--
@@ -17,7 +20,7 @@ import scala.collection.mutable.ListBuffer
 //
 //    2nd Step: Access data to solve the 3 questions.
 //
-//Tasks: Complete question 2
+//Tasks: Complete question 3
 
 
 case class Record(
@@ -79,22 +82,51 @@ def question1(data: ListBuffer[Record]): Unit = //task: Find the hospital with h
 end question1
 
 def question2(data: ListBuffer[Record]): Unit = //task: Find ratio between total number of covid beds to total number of beds for entire dataset
-  //calculate ratio
   var totalCovidBeds = 0 //init a totalVar for beds_covid
   var totalBeds = 0 //init a totalVar for beds
+
   for (record <- data) { //for loop iterates over each record in dataset to allow for totalVars to update.
     totalCovidBeds += record.beds_covid
     totalBeds += record.beds
   }
-  val ratio: Double = totalCovidBeds.toDouble / totalBeds //final ratio value calculated as double
+
+  val ratio: Double = totalCovidBeds.toDouble / totalBeds //final ratio value calculated as double.
   println(f"Question 2: Ratio of covid beds to total beds for dataset is $totalCovidBeds to $totalBeds or ~ $ratio%.2f") // final print. Formatting of ratio value to be rounded to 2dp is from chatGPT.
 end question2
 
-def question3(data:ListBuffer[Record]): Unit =
-  println("Question 3: ")
+def question3(data:ListBuffer[Record]): Unit = //Task: Find the average number of total patients admitted per day per state.
+                                               //      This implies that both covid and pui admittance count indistinctly as one admittance.
+                                               //      Reference: https://www.scala-lang.org/api/3.5.2/scala/collection/mutable.html#
+
+  val stateTotals: mutable.Map[String, Int] = mutable.Map.empty// Use mutable Map to create a collection with locations as keys.
+  val dates: mutable.TreeSet[LocalDate] = mutable.TreeSet.empty// Use mutable TreeSet to collect dates as it is the most efficient for all operations.
+
+  for (record <- data) {// Init for loop to iterate over records data.
+    stateTotals(record.state) = stateTotals.getOrElse(record.state, 0) + record.admitted_total
+    //above statement uses method .getOrElse as Map inherits from MapOps
+    //.getOrElse works by taking record.state as first param and looks through Map to check if it's already associated with existing key-value pair.
+    //the other param in .getOrElse gets returned as the value should there be no existing key-value pair
+    //otherwise, .getOrElse returns value from Map(record.state), and so we can + record.admitted_total to value to update the Map(record.state)
+
+    dates.add(record.date) //add the date of the record to the dates set if not present already.
+  }
+
+  //convert totals in key-value pairs in stateTotals to become averages
+  //to do this, we divide by the number of days
+  for (key <- stateTotals.keys) {
+    stateTotals(key) = stateTotals.apply(key) / dates.count(x => x == x) //lambda function designed to always return true since we simply want the count.
+  } //loop accesses each key (state) and updates its association to the average admitted per day, calculated by taking total value of admitted divided by num of days.
+
+  //final prints
+  println(s"Question 3: Over ${dates.count(x => x ==x)} days average admittance_total for each state is listed as follows:")
+  for (key <- stateTotals.keys) {
+    println(s"    $key: ${stateTotals.apply(key)}")
+  }
+
 end question3
 
 @main def myfirstscala(): Unit =
   val records: ListBuffer[Record] = initData() //initialize data.
   question1(records) // question 1 working.
   question2(records) // question 2 working.
+  question3(records) // question 3 working.
