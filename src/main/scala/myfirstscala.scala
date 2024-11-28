@@ -6,22 +6,18 @@ import scala.collection.mutable
 
 //Created by:
 //  DANIELFARID FEARN HOLDEN 22047880
-//  Current commit: 10
+//  Current commit: 11
 //
 //Project Comments:
-//  Question 2 finished. Now time for question 3.
+//  All questions finished, final clean-up and referencing.
 //
-//  Updated To-Do:
+//  Completed To-Do:
 //    --Create outline for how to solve the 3 problems--
 //    1st step: Figure out how to read data from hospital.csv file --DONE
 //      let us test using the resource provided in the assignment document:
 //        https://alvinalexander.com/scala/how-to-open-read-text-files-in-scala-cookbook-examples/
 //      which describes how to read data from a text/data file.
-//
 //    2nd Step: Access data to solve the 3 questions.
-//
-//Tasks: Complete question 3
-
 
 case class Record(
                    date: LocalDate,
@@ -41,10 +37,10 @@ case class Record(
             )
 end Record
 
-def initData(): ListBuffer[Record] = //function called in Main to parse and return the data.
+def initData(): ListBuffer[Record] = //function called in Main to parse and return the data for storage.
   val dataFilePath = "./data/hospital.csv"
   val data = Source.fromFile(dataFilePath)
-  val records_listBuffer = ListBuffer.empty[Record] // ListBuffer used to store all Record instances efficiently.
+  val records_listBuffer = ListBuffer.empty[Record] // ListBuffer used to store all Record instances efficiently as listBuffer appends with constant time. Reference: https://docs.scala-lang.org/overviews/collections-2.13/performance-characteristics.html
   var counter = 0
   for (line <- data.getLines().drop(1)) { //read each line from hospital.csv file excluding header
     val line_data = line.split(",")
@@ -72,7 +68,7 @@ end initData
 def question1(data: ListBuffer[Record]): Unit = //task: Find the hospital with highest all-time bed count and the highest count for most recent date.
   //first need to find max bed value for all records and the state and date, thus use maxBy method on collection.
   //  reference: https://www.scala-lang.org/api/3.5.2/scala/collection/IterableOnceOps.html
-  val allTimeMax_Record = data.maxBy(_.beds) //find the max beds value for ALL records
+  val allTimeMax_Record = data.maxBy(_.beds) //finds the max beds value for ALL records
 
   //now need to find max bed value for latest record only.
   val latestMax_Record = data.maxBy(record => (record.date, record.beds)) //find record first with max date, and then with max beds
@@ -94,7 +90,7 @@ def question2(data: ListBuffer[Record]): Unit = //task: Find ratio between total
   println(f"Question 2: Ratio of covid beds to total beds for dataset is $totalCovidBeds to $totalBeds or ~ $ratio%.2f") // final print. Formatting of ratio value to be rounded to 2dp is from chatGPT.
 end question2
 
-def question3(data:ListBuffer[Record]): Unit = //Task: Find the average number of total patients admitted per day per state.
+def question3(data:ListBuffer[Record]): Unit = //Task: Find the average number of total patients admitted per day per state for each category.
                                                //      This implies that both covid and pui admittance count indistinctly as one admittance.
                                                //      Reference: https://www.scala-lang.org/api/3.5.2/scala/collection/mutable.html#
 
